@@ -33,17 +33,16 @@ message Attribute {
 message Block {
   string filename = 1;
   string filenameOld = 2;
-  string blend = 3;
-  int32 id = 4;
-  float anchorX = 5;
-  float anchorY = 6;
-  float width = 7;
-  float height = 8;
-  float offsetX = 9;
-  float offsetY = 10;
-  int32 priority = 11;
-  repeated Mesh Mesh = 12;
-  repeated Attribute Attribute = 13;
+  int32 id = 3;
+  float anchorX = 4;
+  float anchorY = 5;
+  float width = 6;
+  float height = 7;
+  float offsetX = 8;
+  float offsetY = 9;
+  int32 priority = 10;
+  repeated Mesh Mesh = 11;
+  repeated Attribute Attribute = 12;
 }
 
 message Atlas {

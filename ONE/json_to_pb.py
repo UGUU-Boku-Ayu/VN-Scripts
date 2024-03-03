@@ -16,7 +16,7 @@ for block_data in data['Block']:
     block_message = atlas_message.Block.add()
     block_message.filename = block_data['filename']
     block_message.filenameOld = block_data['filenameOld']
-    block_message.blend = block_data['blend']
+    #block_message.blend = block_data['blend']
     block_message.id = block_data['id']
     block_message.anchorX = block_data['anchorX']
     block_message.anchorY = block_data['anchorY']
@@ -52,4 +52,5 @@ for block_data in data['Block']:
         attribute_message.color = attribute_data['color']
 
 with open('atlas.pb', 'wb') as f:
+    print(atlas_message.SerializeToString() + b'\x6A\x04\x6E\x6F\x72\x6D')
     f.write(atlas_message.SerializeToString())
