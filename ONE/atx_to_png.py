@@ -10,10 +10,12 @@ from zipfile import ZipFile
 def rebuild_sprite(json_data, texture_path):
     canvas_width = json_data["Canvas"]["Width"]
     canvas_height = json_data["Canvas"]["Height"]
-    sprite = Image.new("RGBA", (canvas_width, canvas_height), (0, 0, 0, 0))
+    sprites = []
 
     for block in json_data["Block"]:
-
+        sprite = Image.new("RGBA", (canvas_width, canvas_height), (0, 0, 0, 0))
+        offset_x = block["offsetX"]
+        offset_y = block["offsetY"]
         for mesh in block["Mesh"]:
             tex_no = mesh["texNo"]
             src_offset_x = mesh["srcOffsetX"]
@@ -24,7 +26,7 @@ def rebuild_sprite(json_data, texture_path):
             tex_v2 = mesh["texV2"]
             view_x = mesh["viewX"]
             view_y = mesh["viewY"]
-
+            
             texture = Image.open(texture_path.replace('[tex_no]', str(tex_no))).convert("RGBA")
 
             cropped_texture = texture.crop((
@@ -34,9 +36,9 @@ def rebuild_sprite(json_data, texture_path):
                 round(tex_v2 * texture.height)
             ))
 
-            sprite.paste(cropped_texture, (round(src_offset_x), round(src_offset_y)), cropped_texture)
-
-    return sprite
+            sprite.paste(cropped_texture, (round(src_offset_x) + round(offset_x), round(src_offset_y) + round(offset_y)))
+            sprites.append(sprite)
+    return sprites
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -51,7 +53,10 @@ if __name__ == "__main__":
         tex_path = f"temp/tex[tex_no].png"
     else:
         tex_path = f"temp/tex[tex_no].webp"
-    sprite = rebuild_sprite(json_data, tex_path)
-    sprite.save(f'{file.replace(".atx", ".png")}', "PNG")
+    sprites = rebuild_sprite(json_data, tex_path)
+    sprite_no = 0
+    for sprite in sprites:
+        sprite.save(f'{file.replace(".atx", "_" + str(sprite_no) + ".png")}', "PNG")
+        sprite_no += 1
     shutil.rmtree('temp')
     print(f'> Reconstructed CG saved as {file.replace(".atx", ".png")}')
