@@ -54,9 +54,14 @@ if __name__ == "__main__":
     else:
         tex_path = f"temp/tex[tex_no].webp"
     sprites = rebuild_sprite(json_data, tex_path)
-    sprite_no = 0
-    for sprite in sprites:
-        sprite.save(f'{file.replace(".atx", "_" + str(sprite_no) + ".png")}', "PNG")
-        sprite_no += 1
+    if len(sprites) > 1:
+        sprite_no = 0
+        for sprite in sprites:
+            sprite.save(f'{file.replace(".atx", "_" + str(sprite_no) + ".png")}', "PNG")
+            print(f'> Reconstructed CG saved as {file.replace(".atx", "_" + str(sprite_no) + ".png")}')
+            sprite_no += 1
+    else:
+        sprite.save(f'{file.replace(".atx", ".png")}', "PNG")
+        print(f'> Reconstructed CG saved as {file.replace(".atx", ".png")}')
     shutil.rmtree('temp')
-    print(f'> Reconstructed CG saved as {file.replace(".atx", ".png")}')
+    
